@@ -6,31 +6,71 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import os
+import sys
+for x in os.walk('../../blacklight'):
+    sys.path.append(x[0])
+sys.path.append(".")
+sys.path.append('../')
+
+# autodoc_mock_imports = ["numpy", "pandas", "tensorflow", "sklearn"]
+autodoc_default_options = {"members": True, "private-members": True}
+add_module_names = False
+
 project = 'Blacklight'
 copyright = '2023, Cole Agard'
 author = 'Cole Agard'
 release = '0.1.6'
 
-autodoc_mock_imports = ["numpy", "pandas", "tensorflow", "sklearn"]
-autodoc_default_options = {"members": True,  "private-members": True}
-add_module_names = False
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
-import sys
-import os
-for x in os.walk('../../blacklight'):
-  sys.path.append(x[0])
-sys.path.append(".")
-sys.path.append('../')
 
+html_additional_pages = {
+    'index': 'custom_index.html',
+    'installation-guide': 'custom_installation-guide.html',
+}
 
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon', 'sphinx.ext.viewcode', 'sphinx.ext.autosummary']
+html_js_files = ['_static/custom.js']
+
+extensions = [
+    'sphinx.ext.autodoc',
+    'sphinx.ext.napoleon',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.autosummary',
+    'sphinx.ext.extlinks',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax',
+    'sphinx.ext.todo',
+    'furo.sphinxext',
+    'recommonmark',
+]
 
 templates_path = ['_templates']
-exclude_patterns = []
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# -- Options for HTML output -------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
+# Furo sidebar customization
 html_theme = 'furo'
-html_static_path = ['_static']
+html_theme_options = {
+    'navigation_with_keys': True,
+    'light_logo': 'logo-light.svg',
+    'dark_logo': 'logo-dark.svg',
+    # Add other theme options as needed
+    'sidebar_hide_name': False,  # Display the TOC in the sidebar
+    'sidebar_hide_navigation': False,  # Display the navigation links in the sidebar
+}
+
+# Add your table of contents here if required
+html_sidebars = {
+    '**': [
+        'sidebar/brand.html',
+        'sidebar/search.html',
+        'sidebar/navigation.html',
+        'module.html',
+        'sidebar/ethical-ads.html',
+
+        # Use Furo's default navigation sidebar
+    ]
+}
+
+# ... (other configurations)
