@@ -29,24 +29,44 @@ class ModelConfig:
             "problem_type": "classification",
             "num_classes": 3, }
 
-
         default_config = model_options
 
+        # Update default_config with values from config (if not None)
         if config is not None:
+            for key in config.keys():
+                if key in default_config and key != "layer_information":
+                    default_config[key] = config[key]
+                elif key == "layer_information":
+                    default_config["layer_information"].update(config["layer_information"])
 
-            # layer_information_config = {"layer_information": config["layer_information"]}
-            # other_config = {key: value for key, value in config.items() if key != "layer_information"}
+        # Update default_config based on the problem type
+        if default_config.get("problem_type") == "classification":
+            if "num_classes" not in default_config:
+                raise ValueError("ModelConfig has no num_classes set for problem type Classification.")
+            default_config["target_layer"] = (default_config.get("num_classes"), "softmax")
+            default_config["loss"] = "categorical_crossentropy"
+        elif default_config.get("problem_type") == "binary_classification":
+            default_config["target_layer"] = (1, "sigmoid")
+            default_config["loss"] = "binary_crossentropy"
+            default_config["num_classes"] = 2
+        elif default_config.get("problem_type") == "regression":
+            default_config["target_layer"] = (1, "linear")
+            default_config["loss"] = "mse"
 
-            # for key, value in layer_information_config.items():
-            #     if key == "layer_information":
-            #         default_config[key] = value
-            default_config["layer_information"].update(config["layer_information"])
-            print(default_config)
-            self.config = default_config
-        else:
-            self.config = default_config
+        # Set default values for the remaining attributes, not set by the user
+        default_config["verbose"] = default_config.get("verbose", 0)
+        default_config["class_weight"] = default_config.get("class_weight", None)
+        default_config["validation_data"] = default_config.get("validation_data", None)
+        default_config["use_multiprocessing"] = default_config.get("use_multiprocessing", False)
+        default_config["early_stopping"] = default_config.get("early_stopping", True)
+        default_config["callbacks"] = default_config.get("callbacks", ModelConfig.get_default_callbacks())
+        default_config["output_bias"] = default_config.get("output_bias", None)
+        default_config["fitness_metric"] = default_config.get("fitness_metric", "auc")
 
-        #split the dictionary into two dictionaries, one for layer_information and one for the rest, and try use update witht that
+        # Set self.config to the final default_config
+        self.config = default_config
+        self.check_config()
+
 
     def get(self, key: str, default=None):
         return self.config.get(key, default)
@@ -104,89 +124,73 @@ class ModelConfig:
             restore_best_weights=True)
 
     @staticmethod
-    def parse_options_to_model_options(options):
-        config = {}
-        if options is None:
-            options = {"layer_information": {
-                "problem_type": "classification",
-                "input_shape": 4,
-                "min_dense_layers": 1,
-                "max_dense_layers": 8,
-                "min_dense_neurons": 2,
-                "max_dense_neurons": 8,
-                "dense_activation_types": ["relu", "sigmoid", "tanh", "selu"]
-            },
-                "problem_type": "classification",
-                "num_classes": 3,
-            }
-
+    def parse_options_to_model_options(config):
+        updated_config = config
         # if options = none, set it to the dictonary used in test
         # write documentation explaining what each of the paramters are, and what choices the user has
         # try if the user only implements one parameter, and not the other, what happens?
         # HINT; dont write a bunch of if conditions, use the get function. if it dosent exist set it to the default.
 
         # implement value errors when important things arent given. when u have layer information, u must have layer shape
-        if options.get("layer_information"):
-            layer_information = options.get("layer_information")
-            config["input_shape"] = layer_information.get("input_shape")
-            # Get Dense Layer Information
-            config["max_dense_layers"] = layer_information.get(
-                "max_dense_layers")
-            config["min_dense_layers"] = layer_information.get(
-                "min_dense_layers")
-            config["min_dense_neurons"] = layer_information.get(
-                "min_dense_neurons")
-            config["max_dense_neurons"] = layer_information.get(
-                "max_dense_neurons")
-            config["dense_activation_types"] = layer_information.get(
-                "dense_activation_types", ["relu", "sigmoid", "tanh", "selu"])
-            # Get Convolutional Layer Information
-            config["max_conv_layers"] = layer_information.get(
-                "max_conv_layers")
-            config["min_conv_layers"] = layer_information.get(
-                "min_conv_layers")
-            # Get Dropout Layer Information
-            config["max_dropout_layers"] = layer_information.get(
-                "max_dropout_layers")
+        # if updated_config.get("layer_information"):
+        #     layer_information = updated_config.get("layer_information")
+        #     print(layer_information)
+        #     updated_config["input_shape"] = layer_information.get("input_shape")
+        #     # Get Dense Layer Information
+        #     updated_config["max_dense_layers"] = layer_information.get(
+        #         "max_dense_layers")
+        #     updated_config["min_dense_layers"] = layer_information.get(
+        #         "min_dense_layers")
+        #     updated_config["min_dense_neurons"] = layer_information.get(
+        #         "min_dense_neurons")
+        #     updated_config["max_dense_neurons"] = layer_information.get(
+        #         "max_dense_neurons")
+        #     updated_config["dense_activation_types"] = layer_information.get(
+        #         "dense_activation_types", ["relu", "sigmoid", "tanh", "selu"])
+        #     # Get Convolutional Layer Information
+        #     updated_config["max_conv_layers"] = layer_information.get(
+        #         "max_conv_layers")
+        #     updated_config["min_conv_layers"] = layer_information.get(
+        #         "min_conv_layers")
+        #     # Get Dropout Layer Information
+        #     updated_config["max_dropout_layers"] = layer_information.get(
+        #         "max_dropout_layers")
 
         # Determine problem type, which sets the last layer of the model.
+        print(updated_config)
+        if updated_config.get("problem_type") == "classification":
+            # if "num_classes" not in updated_config:
+            #     raise ValueError(
+            #         "ModelConfig has no num_classes set for problem type Classification.")
+            setattr(updated_config, "target_layer", (updated_config.get("num_classes"), "softmax"))
+            print(updated_config)
 
-        if options.get("problem_type") == "classification":
-            if "num_classes" not in options:
-                raise ValueError(
-                    "ModelConfig has no num_classes set for problem type Classification.")
-            config["target_layer"] = (options["num_classes"], "softmax")
-            config["loss"] = "categorical_crossentropy"
-            config["num_classes"] = options.get("num_classes")
-        elif options.get("problem_type") == "binary_classification":
-            config["target_layer"] = (1, "sigmoid")
-            config["loss"] = "binary_crossentropy"
-            config["num_classes"] = 2
-        elif options.get("problem_type") == "regression":
-            config["target_layer"] = (1, "linear")
-            config["loss"] = "mse"
+            #setattr(updated_config, "loss", "categorical_crossentropy")
+            updated_config["num_classes"] = updated_config.get("num_classes")
+        elif updated_config.get("problem_type") == "binary_classification":
+            setattr(updated_config, "target_layer", (1, "sigmoid"))
+            setattr(updated_config, "loss", "binary_crossentropy")
+            setattr(updated_config, "num_classes", 2)
+        elif updated_config.get("problem_type") == "regression":
+            setattr(updated_config, "target_layer", (1, "linear"))
+            setattr(updated_config, "loss", "mse")
 
-        config["problem_type"] = options.get("problem_type")
-
-        # Add all the model creation options to the config
-        config["optimizer"] = options.get("optimizer", "adam")
-        config["metrics"] = options.get(
-            "metrics", ModelConfig.get_default_metrics())
-        config["learning_rate"] = options.get("learning_rate", 0.001)
+        # updated_config["problem_type"] = updated_config.get("problem_type")
+        #
+        # # Add all the model creation options to the config
+        # updated_config["optimizer"] = updated_config.get("optimizer", "adam")
+        # updated_config["metrics"] = updated_config.get(
+        #     "metrics", ModelConfig.get_default_metrics())
+        # updated_config["learning_rate"] = updated_config.get("learning_rate", 0.001)
 
         # Add all the training options to the config
+        setattr(updated_config, "verbose", updated_config.get("verbose", 0))
+        setattr(updated_config, "class_weight", updated_config.get("class_weight", None))
+        setattr(updated_config, "validation_data", updated_config.get("validation_data", None))
+        setattr(updated_config, "use_multiprocessing", updated_config.get("use_multiprocessing", False))
+        setattr(updated_config, "early_stopping", updated_config.get("early_stopping", True))
+        setattr(updated_config, "callbacks", updated_config.get("callbacks", ModelConfig.get_default_callbacks()))
+        setattr(updated_config, "output_bias", updated_config.get("output_bias", None))
+        setattr(updated_config, "fitness_metric", updated_config.get("fitness_metric", "auc"))
 
-        config["epochs"] = options.get("epochs", 1000)
-        config["batch_size"] = options.get("batch_size", 32)
-        config["verbose"] = options.get("verbose", 0)
-        config["class_weight"] = options.get("class_weight", None)
-        config["validation_data"] = options.get("validation_data", None)
-        config["use_multiprocessing"] = options.get(
-            "use_multiprocessing", False)
-        config["early_stopping"] = options.get("early_stopping", True)
-        config["callbacks"] = options.get(
-            "callbacks", ModelConfig.get_default_callbacks())
-        config["output_bias"] = options.get("output_bias", None)
-        config["fitness_metric"] = options.get("fitness_metric", "auc")
-
-        return ModelConfig(config)
+        return updated_config
