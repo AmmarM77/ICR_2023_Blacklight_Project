@@ -11,7 +11,7 @@ Make sure you have Python 3.9 or higher installed (not greater than 3.11).
 ### Windows, Linux
 
 1. Clone the repository using:
-   - ```clone https://github.com/AmmarM77/Neural_Network_Topology.git```
+   - ```git clone https://github.com/AmmarM77/Neural_Network_Topology.git```
 2. Create new virtual environment:
    - ```pip install -m virtualenv```
    - ```python -m venv your_virtual_env_name```
