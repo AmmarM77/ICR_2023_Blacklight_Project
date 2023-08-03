@@ -10,13 +10,15 @@ This project aims to use Genetic Algorithms to optimize the topologies of Deep N
 Make sure you have Python 3.9 or higher installed (not greater than 3.11). 
 ### Windows, Linux
 
-1. Create new virtual environment:
+1. Clone the repository using:
+   - ```git clone https://github.com/AmmarM77/Neural_Network_Topology.git```
+2. Create new virtual environment:
    - ```pip install -m virtualenv```
    - ```python -m venv your_virtual_env_name```
    - ```your_virtual_env_name\Scripts\activate```
-2. Install Tensorflow:
-   - ```pip install tensorflow```
-2. Install the package:
+3. Install the necessary packages:
+   - - ```pip install-r requirements.txt```
+4. Install the package:
    - ```pip install blacklight```
 
 ### MacOS (Intel)
