@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "blacklight"
-version = "0.1.9"
+version = "0.1.10"
 description = "AutoML utilizing Genetic Algorithms and Neural Networks"
 authors = ["Cole Agard <ctagard19@gmail.com>"]
 readme = "README.md"
@@ -14,9 +14,9 @@ openpyxl = "*"
 matplotlib = "*"
 tqdm = "*"
 scikit-learn = "*"
-tensorflow = "*"
 tensorflow-macos = {version = "*", markers = "platform_machine == 'arm64' and sys.platform == 'darwin'"}
 tensorflow-metal = {version = "*", markers = "platform_machine == 'arm64' and sys.platform == 'darwin'"}
+tensorflow = {version="*", markers="platform_machine != 'arm64' and sys.platform != 'darwin'"}
 
 
 [tool.poetry.group.dev.dependencies]
