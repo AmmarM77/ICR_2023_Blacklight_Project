@@ -71,3 +71,6 @@ Documentation can be found at https://blacklightlabs.github.io/blacklight/html/i
 Access the slideshow in the Slideshow folder. To convert the current .odp file to a .pdf file run:
 - ```libreoffice --headless --convert-to pdf Mukadam_Understanding_Evolutionary_Algorithm_Search_Slideshow.odp```
 
+## Acknowledgements
+Thank you to my mentor Cole Agard for directing me through the process and providing me access to his work. His guidance was invaluable in learning neural networks and in completing this project. Additionally, thank you to The Institute for Computing In Research for providing the structure and resources to complete the project. 
+
