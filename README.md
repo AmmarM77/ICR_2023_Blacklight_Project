@@ -16,36 +16,44 @@ Make sure you have Python 3.9 or higher installed (not greater than 3.11).
    - ```pip install -m virtualenv```
    - ```python -m venv your_virtual_env_name```
    - ```your_virtual_env_name\Scripts\activate```
-3. Install the necessary packages:
-   - - ```pip install-r requirements.txt```
-4. Install the package:
+3. Install the package:
    - ```pip install blacklight```
+4. Install tensorflow:
+   - ```pip install tensorflow```
+5. Uses: 
+Currently this is a proof of concept project, and a user-end product has not yet been implemented.
 
 ### MacOS (Intel)
 
-1. Create new virtual environment:
+1. Clone the repository using:
+   - ```git clone https://github.com/AmmarM77/Neural_Network_Topology.git```
+2. Create new virtual environment:
    - ```pip install -m virtualenv```
    - ```python -m venv your_virtual_env_name```
    - ```your_virtual_env_name\Scripts\activate```
-2. Install Tensorflow:
+3. Install the package:
+   - ```pip install blacklight```
+4. Install Tensorflow:
    - ```pip install tensorflow-macos```
    - ```pip install tensorflow-metal```
-2. Install the package:
-   - ```pip install blacklight```
+6. Uses: 
+Currently this is a proof of concept project, and a user-end product has not yet been implemented. 
 
 ### MacOS (Apple Silicon)
-1. Download Miniconda from: https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
-2. Install Miniconda:
+1. 1. Clone the repository using:
+   - ```git clone https://github.com/AmmarM77/Neural_Network_Topology.git```
+2. Download Miniconda from: https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+3. Install Miniconda:
    - Navigate to downloads folder ```cd ~/Downloads```
    - ```bash Miniconda3-latest-MacOSX-arm64.sh -b -p $HOME/miniconda```
-3. Activate Miniconda:
+4. Activate Miniconda:
    - ```source ~/miniconda/bin/activate```
-4. Install TensorFlow dependencies: 
+5. Install TensorFlow dependencies: 
     - ```conda install -c apple tensorflow-deps```
-5. Install TensorFlow:
+6. Install TensorFlow:
     - ```pip install tensorflow-macos``` 
     - ```pip install tensorflow-metal```
-6. Install the package:
+8. Install the package:
    - ```pip install blacklight```
     
 ## Hypothesis
@@ -58,3 +66,8 @@ The project utilizes a genetic algorithm to evolve the topology of the DNN. The 
 
 ## Documentation 
 Documentation can be found at https://blacklightlabs.github.io/blacklight/html/index.html
+
+## Slideshow
+Access the slideshow in the Slideshow folder. To convert the current .odp file to a .pdf file run:
+- ```libreoffice --headless --convert-to pdf Mukadam_Understanding_Evolutionary_Algorithm_Search_Slideshow.odp```
+
