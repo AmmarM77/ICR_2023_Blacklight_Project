@@ -76,7 +76,7 @@ To convert paper to pdf:
 
 - ```pdflatex main.tex```
 - ```biber main```
-- ```pdflatex HIV.tex```
+- ```pdflatex main.tex```
 - ```open main.pdf```
 
 
