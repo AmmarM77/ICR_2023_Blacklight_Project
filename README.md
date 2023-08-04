@@ -72,7 +72,8 @@ Access the slideshow in the Slideshow folder. To convert the current .odp file t
 - ```libreoffice --headless --convert-to pdf Mukadam_Understanding_Evolutionary_Algorithm_Search_Slideshow.odp```
 
 ## Paper
-To convert paper to pdf
+To convert paper to pdf:
+
 - ```pdflatex main.tex```
 - ```biber main```
 - ```pdflatex HIV.tex```
